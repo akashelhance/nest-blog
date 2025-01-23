@@ -1,38 +1,70 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 
 @Injectable()
 export class PostsService {
-  private posts: Post[] = [];
-  private idCounter = 1;
+  constructor(
+    @InjectRepository(Post)
+    private readonly postRepository: Repository<Post>,
+  ) {}
 
-  create(post: Omit<Post, 'id' | 'createdAt'>) {
-    const newPost = { ...post, id: this.idCounter++, createdAt: new Date() };
-    this.posts.push(newPost);
-    return newPost;
+  /**
+   * Create a new post
+   * @param post Partial post data (without id and createdAt)
+   * @returns Created post
+   */
+  async create(post: Omit<Post, 'id' | 'createdAt'>): Promise<Post> {
+    const newPost = this.postRepository.create({
+      ...post,
+      createdAt: new Date(), // Automatically set the timestamp
+    });
+    return this.postRepository.save(newPost);
   }
 
-  findAll() {
-    return this.posts;
+  /**
+   * Get all posts
+   * @returns Array of posts
+   */
+  async findAll(): Promise<Post[]> {
+    return this.postRepository.find();
   }
 
-  findOne(id: number) {
-    return this.posts.find((post) => post.id === id);
+  /**
+   * Get a single post by ID
+   * @param id Post ID
+   * @returns Found post or null
+   */
+  async findOne(id: number): Promise<Post | null> {
+    const post = await this.postRepository.findOne({ where: { id } });
+    return post || null; // Return null if no post is found
   }
 
-  update(id: number, updateData: Partial<Post>) {
-    const postIndex = this.posts.findIndex((post) => post.id === id);
-    if (postIndex === -1) return null;
+  // /**
+  //  * Update a post by ID
+  //  * @param id Post ID
+  //  * @param updateData Partial data to update
+  //  * @returns Updated post or null if not found
+  //  */
+  // // async update(id: number, updateData: Partial<Post>): Promise<Post | null> {
+  // //   const post = await this.postRepository.findOne({ where: { id } });
+  // //   if (!post) return null;
 
-    this.posts[postIndex] = { ...this.posts[postIndex], ...updateData };
-    return this.posts[postIndex];
-  }
+  // //   Object.assign(post, updateData); // Update the fields of the post
+  // //   return this.postRepository.save(post); // Save the updated post
+  // // }
 
-  delete(id: number) {
-    const postIndex = this.posts.findIndex((post) => post.id === id);
-    if (postIndex === -1) return null;
+  /**
+   * Delete a post by ID
+   * @param id Post ID
+   * @returns Deleted post or null if not found
+   */
+  async delete(id: number): Promise<Post | null> {
+    const post = await this.postRepository.findOne({ where: { id } });
+    if (!post) return null;
 
-    const [deletedPost] = this.posts.splice(postIndex, 1);
-    return deletedPost;
+    await this.postRepository.remove(post); // Remove the post from the database
+    return post;
   }
 }

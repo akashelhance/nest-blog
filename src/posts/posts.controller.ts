@@ -33,4 +33,11 @@ export class PostsController {
   remove(@Param('id') id: string) {
     return this.postsService.delete(+id);
   }
+
+  @Get('test')
+  testRoute() {
+    return {
+      message: 'This is a test GET route',
+    };
+  }
 }
