@@ -6,8 +6,12 @@ import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
+
+
 @Module({
-  imports: [AuthModule, PostsModule, UsersModule, DatabaseModule],
+  imports: [AuthModule, PostsModule, UsersModule, DatabaseModule, TypeOrmModule.forFeature([User]),],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Post } from '../posts/entities/post.entity'; 
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Post } from '../posts/entities/post.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Post], // Explicitly reference the Post entity
+        entities: [Post, User], // Explicitly reference the Post entity
         synchronize: true, // Syncs the database schema automatically
       }),
     }),
