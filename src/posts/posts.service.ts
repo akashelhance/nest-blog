@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';  // Assuming you have a common pagination DTO
 
 @Injectable()
 export class PostsService {
@@ -17,8 +18,25 @@ export class PostsService {
     return this.postRepository.save(post);
   }
 
-  async findAll(): Promise<Post[]> {
-    return this.postRepository.find();
+  async findAll(paginationDto: PaginationDto): Promise<any> {
+    const { page, limit } = paginationDto;
+
+  
+    const itemsPerPage = limit || 10;  
+    const offset = (page - 1) * itemsPerPage;
+
+   
+    const [posts, total] = await this.postRepository.findAndCount({
+      take: itemsPerPage,  
+      skip: offset,        
+    });
+
+    return {
+      data: posts,
+      total,
+      page,
+      lastPage: Math.ceil(total / itemsPerPage),  
+    };
   }
 
   async findOne(id: number): Promise<Post> {
@@ -31,6 +49,8 @@ export class PostsService {
 
   async update(id: number, updatePostDto: UpdatePostDto, userId: number): Promise<Post> {
     const post = await this.findOne(id);
+
+ 
     if (post.authorId !== userId) {
       throw new ForbiddenException('You are not authorized to update this post');
     }
@@ -41,6 +61,8 @@ export class PostsService {
 
   async delete(id: number, userId: number): Promise<void> {
     const post = await this.findOne(id);
+
+    // Check if the user is the author of the post
     if (post.authorId !== userId) {
       throw new ForbiddenException('You are not authorized to delete this post');
     }

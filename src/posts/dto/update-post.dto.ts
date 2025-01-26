@@ -11,5 +11,5 @@ export class UpdatePostDto {
 
   @IsInt()
   @IsOptional()
-  authorId?: number;  // Optional field in case you want to update the author, though typically not necessary
+  authorId?: number;  
 }

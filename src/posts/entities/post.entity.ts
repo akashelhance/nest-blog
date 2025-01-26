@@ -13,9 +13,9 @@ export class Post {
   content: string;
 
   @Column()
-  authorId: number; // Foreign key to User
+  authorId: number; 
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'authorId' }) // Link the column to the User entity
+  @JoinColumn({ name: 'authorId' }) 
   author: User;
 }
