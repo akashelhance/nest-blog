@@ -1,11 +1,15 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsString, IsInt, IsOptional } from 'class-validator';
 
 export class UpdatePostDto {
-  @IsOptional()
   @IsString()
+  @IsOptional()
   title?: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   content?: string;
+
+  @IsInt()
+  @IsOptional()
+  authorId?: number;  // Optional field in case you want to update the author, though typically not necessary
 }

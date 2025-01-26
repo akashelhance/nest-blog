@@ -1,4 +1,5 @@
-import { IsString } from 'class-validator';
+import { IsString, IsInt } from 'class-validator';
+import { User } from 'src/users/entities/user.entity'; // Import the User entity
 
 export class CreatePostDto {
   @IsString()
@@ -6,4 +7,7 @@ export class CreatePostDto {
 
   @IsString()
   content: string;
+
+  @IsInt()
+  authorId: number;  // Store the author's user ID
 }

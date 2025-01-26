@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './entities/post.entity';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -10,63 +12,43 @@ export class PostsService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  /**
-   * Create a new post
-   * @param post Partial post data (without id and createdAt)
-   * @returns Created post
-   */
-  async create(post: Omit<Post, 'id' | 'createdAt'>): Promise<Post> {
-    const newPost = this.postRepository.create({
-      ...post,
-      createdAt: new Date(), // Automatically set the timestamp
-    });
-    return this.postRepository.save(newPost);
+  async create(createPostDto: CreatePostDto, userId: number): Promise<Post> {
+    const post = this.postRepository.create({ ...createPostDto, authorId: userId });
+    return this.postRepository.save(post);
   }
 
-  /**
-   * Get all posts
-   * @returns Array of posts
-   */
   async findAll(): Promise<Post[]> {
     return this.postRepository.find();
   }
 
-  /**
-   * Get a single post by ID
-   * @param id Post ID
-   * @returns Found post or null
-   */
-  async findOne(id: number): Promise<Post | null> {
-    const post = await this.postRepository.findOne({ where: { id } });
-    return post || null; // Return null if no post is found
-  }
-
-  /**
-   * Update a post by ID
-   * @param id Post ID
-   * @param updateData Partial data to update
-   * @returns Updated post or null if not found
-   */
-  async update(id: number, updateData: Partial<Post>): Promise<Post | null> {
+  async findOne(id: number): Promise<Post> {
     const post = await this.postRepository.findOne({ where: { id } });
     if (!post) {
-      return null; // Return null if the post does not exist
+      throw new NotFoundException(`Post with ID ${id} not found`);
     }
-
-    Object.assign(post, updateData); // Merge the update data into the existing post
-    return this.postRepository.save(post); // Save the updated post to the database
+    return post;
   }
 
-  /**
-   * Delete a post by ID
-   * @param id Post ID
-   * @returns Deleted post or null if not found
-   */
-  async delete(id: number): Promise<Post | null> {
-    const post = await this.postRepository.findOne({ where: { id } });
-    if (!post) return null;
+  async update(id: number, updatePostDto: UpdatePostDto, userId: number): Promise<Post> {
+    const post = await this.findOne(id);
 
-    await this.postRepository.remove(post); // Remove the post from the database
-    return post;
+    // Check if the user is the author of the post
+    if (post.authorId !== userId) {
+      throw new ForbiddenException('You are not authorized to update this post');
+    }
+
+    Object.assign(post, updatePostDto);
+    return this.postRepository.save(post);
+  }
+
+  async delete(id: number, userId: number): Promise<void> {
+    const post = await this.findOne(id);
+
+    // Check if the user is the author of the post
+    if (post.authorId !== userId) {
+      throw new ForbiddenException('You are not authorized to delete this post');
+    }
+
+    await this.postRepository.remove(post);
   }
 }

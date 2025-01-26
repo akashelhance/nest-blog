@@ -1,21 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
-// import { User } from '../user/entities/user.entity'; // Assuming you have a User entity
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
-@Entity() 
+@Entity()
 export class Post {
-  @PrimaryGeneratedColumn() 
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
+  @Column()
   title: string;
 
-  @Column('text') 
+  @Column()
   content: string;
 
-  // // Relation to the User entity (optional, uncomment if needed)
-  // @ManyToOne(() => User, (user) => user.posts, { nullable: true, onDelete: 'SET NULL' })
-  // author?: User;
+  @Column()
+  authorId: number; // Foreign key to User
 
-  @CreateDateColumn() 
-  createdAt: Date;
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'authorId' }) // Link the column to the User entity
+  author: User;
 }

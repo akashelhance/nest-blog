@@ -1,22 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Post } from '../../posts/entities/post.entity'; // Import the Post entity
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  googleId: string;
+  @Column({ length: 255 })
+  name: string;
 
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  name: string;
-
   @Column({ nullable: true })
-  profilePicture: string;
+  googleId: string;
 
-  @Column({ default: new Date() })
-  createdAt: Date;
+  @OneToMany(() => Post, (post) => post.author, { cascade: true })
+  posts: Post[]; 
 }

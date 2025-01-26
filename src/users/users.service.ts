@@ -11,6 +11,8 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  
+
   async findByGoogleId(googleId: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({ where: { googleId } });
     return user || undefined; 
@@ -21,8 +23,16 @@ export class UsersService {
     return user || undefined; 
   }
 
+
+  async findOne(userId: number): Promise<User | null> {
+    return this.userRepository.findOne({ where: { id: userId } });
+  }
+
+  
   async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(createUserDto);
     return this.userRepository.save(user);
   }
+
+  
 }
