@@ -41,19 +41,21 @@ export class PostsService {
     return post || null; // Return null if no post is found
   }
 
-  // /**
-  //  * Update a post by ID
-  //  * @param id Post ID
-  //  * @param updateData Partial data to update
-  //  * @returns Updated post or null if not found
-  //  */
-  // // async update(id: number, updateData: Partial<Post>): Promise<Post | null> {
-  // //   const post = await this.postRepository.findOne({ where: { id } });
-  // //   if (!post) return null;
+  /**
+   * Update a post by ID
+   * @param id Post ID
+   * @param updateData Partial data to update
+   * @returns Updated post or null if not found
+   */
+  async update(id: number, updateData: Partial<Post>): Promise<Post | null> {
+    const post = await this.postRepository.findOne({ where: { id } });
+    if (!post) {
+      return null; // Return null if the post does not exist
+    }
 
-  // //   Object.assign(post, updateData); // Update the fields of the post
-  // //   return this.postRepository.save(post); // Save the updated post
-  // // }
+    Object.assign(post, updateData); // Merge the update data into the existing post
+    return this.postRepository.save(post); // Save the updated post to the database
+  }
 
   /**
    * Delete a post by ID
