@@ -5,11 +5,11 @@ import { DataSource } from 'typeorm';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS to allow requests from the Angular frontend
+  
   app.enableCors({
-    origin: 'http://localhost:4200', // Replace with your Angular app's URL
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-    credentials: true, // Allow cookies if needed
+    origin: 'http://localhost:4200', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
+    credentials: true, 
   });
 
   const dataSource = app.get(DataSource);

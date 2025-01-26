@@ -13,12 +13,12 @@ export class UsersService {
 
   async findByGoogleId(googleId: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({ where: { googleId } });
-    return user || undefined; // Convert `null` to `undefined`
+    return user || undefined; 
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.userRepository.findOne({ where: { email } });
-    return user || undefined; // Convert `null` to `undefined`
+    return user || undefined; 
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {

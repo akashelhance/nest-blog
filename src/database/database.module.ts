@@ -17,8 +17,8 @@ import { User } from 'src/users/entities/user.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [Post, User], // Explicitly reference the Post entity
-        synchronize: true, // Syncs the database schema automatically
+        entities: [Post, User], 
+        synchronize: true, 
       }),
     }),
   ],

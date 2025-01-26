@@ -1,21 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
 // import { User } from '../user/entities/user.entity'; // Assuming you have a User entity
 
-@Entity() // Marks the class as a TypeORM entity
+@Entity() 
 export class Post {
-  @PrimaryGeneratedColumn() // Auto-generates the primary key
+  @PrimaryGeneratedColumn() 
   id: number;
 
-  @Column({ length: 255 }) // Sets a maximum length for the title
+  @Column({ length: 255 })
   title: string;
 
-  @Column('text') // Allows for long-form content
+  @Column('text') 
   content: string;
 
   // // Relation to the User entity (optional, uncomment if needed)
   // @ManyToOne(() => User, (user) => user.posts, { nullable: true, onDelete: 'SET NULL' })
   // author?: User;
 
-  @CreateDateColumn() // Automatically sets the creation timestamp
+  @CreateDateColumn() 
   createdAt: Date;
 }

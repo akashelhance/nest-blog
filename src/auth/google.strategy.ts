@@ -16,7 +16,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
     try {
-      console.log('Google Profile:', profile);  // Log the profile to see if Google returned the expected data
+      console.log('Google Profile:', profile);  
       const { id, emails, displayName, photos } = profile;
 
       let user = await this.usersService.findByGoogleId(id);
@@ -29,9 +29,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
       }
 
-      return done(null, user);  // Ensure user is being returned correctly
+      return done(null, user); 
     } catch (error) {
-      console.error('Error in GoogleStrategy:', error);  // Log any errors
+      console.error('Error in GoogleStrategy:', error);  
       done(error, false);
     }
   }
