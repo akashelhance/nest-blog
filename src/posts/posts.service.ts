@@ -31,8 +31,6 @@ export class PostsService {
 
   async update(id: number, updatePostDto: UpdatePostDto, userId: number): Promise<Post> {
     const post = await this.findOne(id);
-
-    // Check if the user is the author of the post
     if (post.authorId !== userId) {
       throw new ForbiddenException('You are not authorized to update this post');
     }
@@ -43,8 +41,6 @@ export class PostsService {
 
   async delete(id: number, userId: number): Promise<void> {
     const post = await this.findOne(id);
-
-    // Check if the user is the author of the post
     if (post.authorId !== userId) {
       throw new ForbiddenException('You are not authorized to delete this post');
     }
