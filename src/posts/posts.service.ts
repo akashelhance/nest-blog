@@ -20,24 +20,22 @@ export class PostsService {
 
   async findAll(paginationDto: PaginationDto): Promise<any> {
     const { page, limit } = paginationDto;
-
   
-    const itemsPerPage = limit || 10;  
+    const itemsPerPage = limit || 10;
     const offset = (page - 1) * itemsPerPage;
 
-   
     const [posts, total] = await this.postRepository.findAndCount({
       take: itemsPerPage,  
       skip: offset,        
     });
-
     return {
       data: posts,
       total,
       page,
-      lastPage: Math.ceil(total / itemsPerPage),  
+      lastPage: Math.ceil(total / itemsPerPage),
     };
   }
+
 
   async findOne(id: number): Promise<Post> {
     const post = await this.postRepository.findOne({ where: { id } });
@@ -62,11 +60,16 @@ export class PostsService {
   async delete(id: number, userId: number): Promise<void> {
     const post = await this.findOne(id);
 
-    // Check if the user is the author of the post
+
     if (post.authorId !== userId) {
       throw new ForbiddenException('You are not authorized to delete this post');
     }
 
     await this.postRepository.remove(post);
   }
+
+  async findPostsByUser(userId: number) {
+    return this.postRepository.find({ where: { authorId: userId } });
+  }
+  
 }
