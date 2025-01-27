@@ -23,7 +23,7 @@ export class AuthController {
       }
 
       console.log('User from Google:', user);
-      const token = await this.authService.login(user);  // Generate JWT
+      const token = await this.authService.login(user); 
       console.log('Generated JWT:', token);  
 
       

@@ -18,7 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed": "ts-node src/scripts/seed.ts"
+    "seed": "ts-node src/scripts/seed.ts",
+    "docker:build": "docker build -t nestjs-app",
+    "docker:run": "docker run -p 3000:3000 nestjs-app"
   },
   "dependencies": {
     "@faker-js/faker": "^9.4.0",
