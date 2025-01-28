@@ -21,14 +21,17 @@ import { Request } from 'express';
 import { JwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 
-import { User } from 'src/users/entities/user.entity'; // Assuming you're using a TypeORM entity
+import { User } from 'src/users/entities/user.entity'; 
 import { UsersService } from 'src/users/users.service';
 
 @Controller('posts')
 export class PostsController {
+  findUserPosts(arg0: { user: any; }): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private readonly postsService: PostsService,
-    private readonly userService: UsersService,  // Inject UserService
+    private readonly userService: UsersService, 
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -131,6 +134,9 @@ export class TestController {
 
 @Controller('user-posts')
 export class UserPostsController {
+  static findUserPosts(arg0: { user: any; }) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly postsService: PostsService) {}
 
   @UseGuards(JwtAuthGuard)
@@ -142,7 +148,6 @@ export class UserPostsController {
       throw new ForbiddenException('User not authenticated');
     }
 
-    // Fetch posts created by the logged-in user using the posts service
     return this.postsService.findPostsByUser(user.sub);
   }
 }
