@@ -1,36 +1,123 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## Overview
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The backend of the Blog Application is built using NestJS. It provides RESTful APIs for user authentication and post management. Authentication is implemented via Google login using PassportJS, and JSON Web Tokens (JWTs) are used to secure API requests.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src=https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+Authentication:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Login using Google.
+
+- JWT-based authentication for secured routes.
+
+Post Management:
+
+- Create, read, update, and delete posts.
+
+- Public access to view post details.
+
+Prerequisites
+
+- Node.js and npm installed.
+
+- NestJS CLI installed.
+
+
 
 ## Project setup
 
+Clone the repository:
+
+
+```bash
+git clone https://github.com/akashelhance/nest-blog.git
+cd nest-blog
+```
+
 ```bash
 $ npm install
+
 ```
+
+## Environment Variables
+
+Create a .env file in the root of your project with the following configuration:
+
+```bash
+DB_HOST=""
+DB_PORT=""
+DB_USERNAME=""
+DB_PASSWORD=""
+DB_DATABASE=""
+
+JWT_SECRET=""
+
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+GOOGLE_CALLBACK_URL=""
+
+```
+
+## How to Obtain GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET
+
+## Step 1: Go to Google Cloud Console
+- Visit the Google Cloud Console.
+- Log in with your Google account.
+
+## Step 2: Create a New Project
+
+- In the top navigation bar, click on the Select a project dropdown.
+- Click New Project.
+- Enter a name for your project (e.g., "My App").
+- Select your organization (if applicable) and billing account.
+- Click Create.
+## Step 3: Enable the OAuth 2.0 API
+
+- Once the project is created, click on the Navigation Menu (☰) on the top left.
+- Navigate to APIs & Services > Library.
+- Search for "Google Identity Services".
+- Click on it and then click Enable.
+ ## Step 4: Create OAuth 2.0 Credentials
+- Go to APIs & Services > Credentials.
+- Click + CREATE CREDENTIALS at the top and select OAuth 2.0 Client IDs.
+- If prompted, configure your OAuth consent screen:
+- Go to OAuth consent screen.
+- Choose External (recommended for most applications).
+- Enter an App name, Support email, and other required information.
+- Save your changes.
+- Once the consent screen is configured, return to Credentials.
+- Choose Web application as the application type.
+## Step 5: Set Authorized Redirect URIs
+- In the Authorized redirect URIs field, enter the URL where users will be redirected after authenticating via Google.
+- For local development: http://localhost:3000/auth/google/callback
+- For production: Use your application's domain, e.g., https://yourdomain.com/auth/google/callback
+Click Create.
+
+
+## Setting Up PostgreSQL Database 
+
+- Open pgAdmin:
+- Launch the pgAdmin application from your system.
+- Connect to Your PostgreSQL Server:
+- In the left-hand panel, right-click on Servers and click Create > Server.
+- In the pop-up dialog:
+- General Tab: Enter a name for your server (e.g., Local PostgreSQL).
+- Connection Tab: Fill in the connection details:
+- Host name/address: localhost (or your PostgreSQL server address).
+- Port: 5432 (default PostgreSQL port).
+- Maintenance database: postgres.
+- Username: Your PostgreSQL username (e.g., postgres).
+- Password: Your PostgreSQL password.
+- Click Save.
+- Create a New Database:
+- Right-click on Databases and select Create > Database.
+- Database Name: Enter a name for your database (e.g., blog_app).
+- Owner: Select the owner (default: postgres).
+- Click Save.
+- Set Up Environment Variables:
+- Update your .env file with the database connection details:
+
+
 
 ## Compile and run the project
 
@@ -46,7 +133,7 @@ $ npm run start:prod
 
 # to seeds the database
 $ npx ts-node -r tsconfig-paths/register src/scripts/seed.ts
-
+```
 
 ## API Endpoints
 
